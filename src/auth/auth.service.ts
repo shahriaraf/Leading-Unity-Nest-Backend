@@ -44,8 +44,9 @@ export class AuthService {
     const isMatch = await bcrypt.compare(loginDto.password, user.password);
 
     if (!isMatch) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
+    console.log('Password mismatch:', loginDto.password, user.password);
+    throw new UnauthorizedException('Invalid email or password');
+  }
 
     // 3. Return success
     return {
