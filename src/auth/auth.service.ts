@@ -22,7 +22,8 @@ import { RegisterAdminDto } from './dto/register-admin.dto';
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(AppSettings.name) private settingsModel: Model<AppSettingsDocument>,
+    @InjectModel(AppSettings.name)
+    private settingsModel: Model<AppSettingsDocument>,
     private jwtService: JwtService,
   ) {}
 
@@ -32,6 +33,8 @@ export class AuthService {
     const user = await this.userModel
       .findOne({ email: loginDto.email })
       .select('+password');
+    console.log('Login attempt:', loginDto.email);
+    console.log('User found in DB:', user);
 
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -59,7 +62,8 @@ export class AuthService {
 
   async registerAdmin(dto: RegisterAdminDto) {
     const adminExists = await this.userModel.findOne({ role: 'admin' });
-    if (adminExists) throw new BadRequestException('An admin account already exists.');
+    if (adminExists)
+      throw new BadRequestException('An admin account already exists.');
 
     // 1. Hash Password manually before saving
     const hashedPassword = await this.hashPassword(dto.password);
@@ -67,7 +71,7 @@ export class AuthService {
     const user = await this.userModel.create({
       ...dto,
       password: hashedPassword, // Save hashed password
-      role: 'admin'
+      role: 'admin',
     });
 
     return {
@@ -90,16 +94,15 @@ export class AuthService {
     const userExists = await this.userModel.findOne({ email: dto.email });
     if (userExists) throw new BadRequestException('User already exists');
 
-
     // 1. Hash Password manually before saving
     const hashedPassword = await this.hashPassword(dto.password);
 
-    const user = await this.userModel.create({ 
-      ...dto, 
+    const user = await this.userModel.create({
+      ...dto,
       password: hashedPassword, // Save hashed password
-      role: 'student' 
+      role: 'student',
     });
-    
+
     return {
       _id: user._id,
       name: user.name,
