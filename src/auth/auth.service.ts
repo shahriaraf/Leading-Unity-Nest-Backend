@@ -43,9 +43,7 @@ export class AuthService {
     // 2. Compare password manually (Fixes the "not a function" error)
     const isMatch = await bcrypt.compare(loginDto.password, user.password);
 
-    if (!isMatch) {
-      throw new UnauthorizedException('Invalid email or password');
-    }
+   if (!isMatch) { console.log('Password mismatch:', loginDto.password, user.password); throw new UnauthorizedException('Invalid email or password'); }
 
     // 3. Return success
     return {
