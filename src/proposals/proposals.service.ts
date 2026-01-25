@@ -72,4 +72,12 @@ export class ProposalsService {
     proposal.status = status;
     return proposal.save();
   }
+
+  async getMyProposals(userId: string) {
+  return this.proposalModel
+    .find({ student: userId })
+    .populate('course', 'courseCode courseTitle')
+    .exec();
+}
+
 }
