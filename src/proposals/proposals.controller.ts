@@ -24,6 +24,12 @@ export class ProposalsController {
     return this.proposalsService.getAll();
   }
 
+  @Get('my')
+getMyProposals(@GetUser() user: UserDocument) {
+  return this.proposalsService.getMyProposals(user._id);
+}
+
+
   @Put(':id')
   @UseGuards(new RolesGuard(['admin']))
   updateStatus(@Param('id') id: string, @Body('status') status: string) {
