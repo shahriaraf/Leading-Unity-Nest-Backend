@@ -26,7 +26,7 @@ export class ProposalsController {
 
   @Get('my')
 getMyProposals(@GetUser() user: UserDocument) {
-  return this.proposalsService.getMyProposals(user._id);
+  return this.proposalsService.getMyProposals(user._id.toString());
 }
 
 
